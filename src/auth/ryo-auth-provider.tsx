@@ -1,5 +1,35 @@
-type RyoAuthProviderProps = {};
+import { createContext, ReactNode } from "react";
+import api from "./ryo-auth-api";
 
-export type RyoAuthProviderState = {};
+type RyoAuthProviderProps = {
+  children?: ReactNode;
+};
 
-const initialState: RyoAuthProviderState = {};
+export type RyoAuthProviderState = {
+  login: () => void;
+};
+
+const initialState: RyoAuthProviderState = {
+  login: () => null,
+};
+
+export const RyoAuthProviderContext =
+  createContext<RyoAuthProviderState>(initialState);
+
+export function RyoAuthProvider({ children, ...props }: RyoAuthProviderProps) {
+  const login = async () => {
+    const response = await api.login();
+
+    return response;
+  };
+
+  const value = {
+    login,
+  };
+
+  return (
+    <RyoAuthProviderContext.Provider {...props} value={value}>
+      {children}
+    </RyoAuthProviderContext.Provider>
+  );
+}
