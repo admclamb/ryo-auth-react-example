@@ -11,6 +11,7 @@ export type RyoAuthProviderState = {
   login: (email: string, password: string) => void;
   signup: (email: string, password: string) => void;
   getProfile: () => any;
+  getAccessToken: () => Promise<string | null>;
   account: Account | null;
   error: ErrorModel | null;
 };
@@ -19,6 +20,7 @@ const initialState: RyoAuthProviderState = {
   login: () => null,
   signup: () => null,
   getProfile: () => null,
+  getAccessToken: () => Promise.resolve(null),
   account: null,
   error: null,
 };
@@ -64,9 +66,20 @@ export function RyoAuthProvider({ children, ...props }: RyoAuthProviderProps) {
     return [data, error];
   };
 
+  const getAccessToken = async (): Promise<string | null> => {
+    const [data, error] = await api.getAccessToken();
+
+    if (data?.accessToken) {
+      return data.accessToken;
+    }
+
+    return null;
+  };
+
   const value = {
     login,
     signup,
+    getAccessToken,
     getProfile,
     account,
     error,

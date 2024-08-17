@@ -69,6 +69,7 @@ const login = (
       email,
       password,
     },
+    withCredentials: true,
   };
 
   return callExternalApi<Account>({ config });
@@ -86,6 +87,7 @@ const signup = (
       password,
       connection,
     },
+    withCredentials: true,
   };
 
   return callExternalApi<Account>({ config });
@@ -94,12 +96,22 @@ const signup = (
 const getProfile = (): Promise<ApiResponse<Account>> => {
   const config: AxiosRequestConfig = {
     url: "/api/v1/account/profile",
+    withCredentials: true,
   };
 
   return callExternalApi<Account>({ config });
 };
 
-const api = { login, signup, getProfile };
+const getAccessToken = (): Promise<ApiResponse<{ accessToken: string }>> => {
+  const config: AxiosRequestConfig = {
+    url: "/api/v1/account/access-token",
+    withCredentials: true,
+  };
+
+  return callExternalApi<{ accessToken: string }>({ config });
+};
+
+const api = { login, signup, getProfile, getAccessToken };
 
 Object.freeze(api);
 export default api;
