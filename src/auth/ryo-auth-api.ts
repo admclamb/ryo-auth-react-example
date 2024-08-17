@@ -1,11 +1,14 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ApiResponse } from "./api-response-model";
 import { ErrorModel } from "./error-model";
+import { Account } from "./account-model";
 
 const axiosApi = axios.create({
   baseURL: import.meta.env.VITE_API_SERVER_URL ?? "",
   timeout: 30_000,
 });
+
+const connection = "Username-Password-Authentication";
 
 const callExternalApi = async <T>(options: {
   config: AxiosRequestConfig;
@@ -55,16 +58,48 @@ const callExternalApi = async <T>(options: {
   }
 };
 
-const login = () => {
+const login = (
+  email: string,
+  password: string
+): Promise<ApiResponse<Account>> => {
   const config: AxiosRequestConfig = {
-    url: "/api/v1/login",
+    url: "/api/v1/account/login",
     method: "POST",
+    data: {
+      email,
+      password,
+    },
   };
 
-  return callExternalApi({ config });
+  return callExternalApi<Account>({ config });
 };
 
-const api = { login };
+const signup = (
+  email: string,
+  password: string
+): Promise<ApiResponse<Account>> => {
+  const config: AxiosRequestConfig = {
+    url: "/api/v1/account",
+    method: "POST",
+    data: {
+      email,
+      password,
+      connection,
+    },
+  };
+
+  return callExternalApi<Account>({ config });
+};
+
+const getProfile = (): Promise<ApiResponse<Account>> => {
+  const config: AxiosRequestConfig = {
+    url: "/api/v1/account/profile",
+  };
+
+  return callExternalApi<Account>({ config });
+};
+
+const api = { login, signup, getProfile };
 
 Object.freeze(api);
 export default api;

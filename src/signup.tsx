@@ -1,8 +1,8 @@
 import { FormEvent, useState } from "react";
 import { useRyoAuth } from "./auth/use-ryo-auth";
 
-const Login = () => {
-  const { login } = useRyoAuth();
+const Signup = () => {
+  const { signup } = useRyoAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordShowing, setIsPasswordShowing] = useState(true);
@@ -18,7 +18,7 @@ const Login = () => {
   const submitForm = (e: FormEvent) => {
     e.preventDefault();
 
-    login(email, password);
+    signup(email, password);
   };
 
   const hidePassword = (e: FormEvent) => {
@@ -29,7 +29,7 @@ const Login = () => {
 
   return (
     <div className="login">
-      <h1>Login</h1>
+      <h1>Signup</h1>
       <form onSubmit={submitForm} className="form">
         <div className="form-container">
           <label htmlFor="email">Email</label>
@@ -53,11 +53,11 @@ const Login = () => {
           </button>
         </div>
         <button type="submit" className="form-button">
-          Sign in
+          Create Account
         </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Signup;
